@@ -2,8 +2,8 @@
 // We set the longitude, latitude, and the starting zoom level
 // This gets inserted into the div with an id of 'map'
 var myMap = L.map("mapid", {
-    center: [45.52, -122.67],
-    zoom: 13
+    center: [39.3210, -111.0937],
+    zoom: 5
   });
   
   // Adding a tile layer (the background map image) to our map
@@ -17,3 +17,119 @@ var myMap = L.map("mapid", {
     accessToken: API_KEY
   }).addTo(myMap);
   
+
+mapEarthQuakes();  
+
+function mapEarthQuakes() {
+    console.log("mapEarthQuakes");
+    var url = `https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson`;
+
+    
+  
+    d3.json(url).then(function(data) {
+    
+        //console.log(data);
+        for (var i = 0; i < data.features.length; i++) {
+            // Grab values from the response json object to build the plots
+            var mag = data.features[i].properties.mag;
+            var place = data.features[i].properties.place;
+
+            var coordinates = data.features[i].geometry.coordinates;
+            var longitude = coordinates[0];
+            var latitude = coordinates[1];
+            var depth = coordinates[2];
+            
+            //console.log('longitude is ' + longitude);
+            //console.log('latitude is ' + latitude);
+            console.log('depth is ' + depth);
+
+            // Create a new marker
+            // Pass in some initial options, and then add it to the map using the addTo method
+            var circle = L.circle([latitude, longitude], {
+                color: depth,
+                // Set color scale
+                //scale: ["#ffffb2", "#b10026"],
+                //fillColor: '#008080',
+                fillColor: getColor(depth),
+                fillOpacity: 0.5,
+                radius: mag * 10000,
+                title: place
+            
+            }).addTo(myMap);
+            
+            // var marker = L.marker([latitude, longitude], {
+            //     bindPopup: ("test").openPopup
+            // }).addTo(myMap);
+
+            
+        };
+
+        // Set up the legend
+        var legend = L.control({ position: "bottomright" });
+        legend.onAdd = function(myMap) {
+                console.log("onAdd");
+
+        
+             var div = L.DomUtil.create('div', 'info legend'),
+            
+                 steps =  6
+                 grades = [-10, 10, 30, 50, 70, 90]
+
+            // loop through our density intervals and generate a label with a colored square for each interval
+            for (var i = 0; i < steps; i++) {
+                div.innerHTML +=
+                    '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+                    grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+            }
+
+            return div;
+        };
+        legend.addTo(myMap);   
+    });
+
+};
+
+function getColor(d) {
+
+    console.log("get color: " + d)
+    return d > 999 ? '#9999FF' :
+            d > 499  ? '#7D7FE2' :
+            d > 199  ? '#6066C6' :
+            d > 49 ? '#555EAA' :
+            d > 10  ? '#23388F' :
+                      '#002275';
+}   
+ 
+
+
+function style(feature) {
+    return {
+        fillColor: getColor(feature.properties.density),
+        weight: 2,
+        opacity: 1,
+        color: 'white',
+        dashArray: '3',
+        fillOpacity: 0.7
+    };
+}
+
+   
+
+
+
+//L.geoJson(statesData, {style: style}).addTo(map);
+
+
+
+// myMap.on('click', onMapClick);
+
+// var popup = L.popup();
+
+// function onMapClick(e){
+//     //alert("you clicked at " + e.latlng);
+//     popup
+//         .setLatLng(e.latlng)
+//         .setContent("You clicked at " + e.latlng.toString())
+//         .openOn(myMap);
+// };
+
