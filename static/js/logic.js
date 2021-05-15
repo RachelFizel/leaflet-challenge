@@ -18,7 +18,10 @@ var myMap = L.map("mapid", {
   }).addTo(myMap);
   
 
-mapEarthQuakes();  
+mapEarthQuakes(); 
+mapTectonicPlates();
+
+https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_plates.json
 
 function mapEarthQuakes() {
     console.log("mapEarthQuakes");
@@ -41,7 +44,7 @@ function mapEarthQuakes() {
             
             //console.log('longitude is ' + longitude);
             //console.log('latitude is ' + latitude);
-            console.log('depth is ' + depth);
+            //console.log('depth is ' + depth);
 
             // Create a new marker
             // Pass in some initial options, and then add it to the map using the addTo method
@@ -55,12 +58,9 @@ function mapEarthQuakes() {
                 radius: mag * 10000,
                 title: place
             
-            }).addTo(myMap);
+            }).addTo(myMap).on("click", circleClick);
             
-            // var marker = L.marker([latitude, longitude], {
-            //     bindPopup: ("test").openPopup
-            // }).addTo(myMap);
-
+ 
             
         };
 
@@ -89,9 +89,31 @@ function mapEarthQuakes() {
 
 };
 
+
+
+
+function mapTectonicPlates() {
+    console.log("mapTectonicPlates");
+    var url = `https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_plates.json`;
+
+    
+  
+    d3.json(url).then(function(data) {
+    
+        console.log(data);
+
+        
+    });
+};
+
+
+
+
+
+
 function getColor(d) {
 
-    console.log("get color: " + d)
+    //console.log("get color: " + d)
     return d > 999 ? '#9999FF' :
             d > 499  ? '#7D7FE2' :
             d > 199  ? '#6066C6' :
@@ -119,17 +141,14 @@ function style(feature) {
 
 //L.geoJson(statesData, {style: style}).addTo(map);
 
+//myMap.on('click', onMapClick);
 
+var popup = L.popup();
 
-// myMap.on('click', onMapClick);
-
-// var popup = L.popup();
-
-// function onMapClick(e){
-//     //alert("you clicked at " + e.latlng);
-//     popup
-//         .setLatLng(e.latlng)
-//         .setContent("You clicked at " + e.latlng.toString())
-//         .openOn(myMap);
-// };
-
+function circleClick(e){
+    //  alert("you clicked at " + e.latlng);
+    popup
+        .setLatLng(e.latlng)
+        .setContent("You clicked at " + e.latlng.toString())
+        .openOn(myMap);
+};
