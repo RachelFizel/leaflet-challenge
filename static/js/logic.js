@@ -51,65 +51,8 @@ function mapEarthQuakes() {
                 }
 
                 
-            }).addTo(myMap)
+            }).addTo(myMap).on("click", circleClick);
     });
-
-    
-        // //console.log(data);
-        // for (var i = 0; i < data.features.length; i++) {
-        //     // Grab values from the response json object to build the plots
-        //     var mag = data.features[i].properties.mag;
-        //     var place = data.features[i].properties.place;
-
-        //     var coordinates = data.features[i].geometry.coordinates;
-        //     var longitude = coordinates[0];
-        //     var latitude = coordinates[1];
-        //     var depth = coordinates[2];
-            
-        //     //console.log('longitude is ' + longitude);
-        //     //console.log('latitude is ' + latitude);
-        //     //console.log('depth is ' + depth);
-
-        //     // Create a new marker
-        //     // Pass in some initial options, and then add it to the map using the addTo method
-        //     var circle = L.circle([latitude, longitude], {
-        //         color: depth,
-        //         // Set color scale
-        //         //scale: ["#ffffb2", "#b10026"],
-        //         //fillColor: '#008080',
-        //         fillColor: getColor(depth),
-        //         fillOpacity: 0.5,
-        //         radius: mag * 10000,
-        //         title: place
-            
-        //     }).addTo(myMap).on("click", circleClick);
-            
- 
-            
-    //    });
-
-        // Set up the legend
-        // var legend = L.control({ position: "bottomright" });
-        // legend.onAdd = function(myMap) {
-        //         console.log("onAdd");
-
-        
-        //      var div = L.DomUtil.create('div', 'info legend'),
-            
-        //          steps =  6
-        //          grades = [-10, 10, 30, 50, 70, 90]
-
-        //     // loop through our density intervals and generate a label with a colored square for each interval
-        //     for (var i = 0; i < steps; i++) {
-        //         div.innerHTML +=
-        //             '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
-        //             grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
-        //     }
-
-        //     return div;
-        // };
-        // legend.addTo(myMap);   
-    //});
 
 };
 
@@ -126,42 +69,9 @@ function mapTectonicPlates() {
 
         L.geoJson(data,
             {
-                color: "white",
-                // Set color scale
-                //scale: ["#ffffb2", "#b10026"],
-                //fillColor: '#008080',
-                //fillColor: getColor(feature.geometry.coordinates[2]),
-                //fillOpacity: 0.5,
-                //radius: feature.properties.mag * 7
-                //title: place
-                
+                color: "white"               
                 
             }).addTo(myMap)
-
-
-
-        // var filtered = data.features.filter(function(f) {
-        //     return f.properties.PlateName == "North America" || f.properties.PlateName == "United States"; 
-        //  });
-        //  console.log(filtered);
-
-        // //var resultArray = data.filter(s => s.PlateName == selected_state);
-
-        // var latlngs = [];
-        
-        // //              i < resultArray.length  
-        // for (var i = 0; i < 10; i++) {
-        //     //for (var j = 0; j < data.features[i].geometry.coordinates.length; j++) {
-        //         latlngs.push(filtered[0].geometry.coordinates);
-        //         console.log (latlngs);
-        //     }
-        // // create a red polyline from an array of LatLng points
-        // // var latlngs = [
-        // //     [45.51, -122.68],
-        // //     [37.77, -122.43],
-        // //     [34.04, -118.2]
-        // // ];
-        // var polyline = L.polyline(latlngs, {color: 'blue'}).addTo(myMap);
         
     });
 };
@@ -197,16 +107,9 @@ function style(feature) {
 
    
 
-
-
-//L.geoJson(statesData, {style: style}).addTo(map);
-
-//myMap.on('click', onMapClick);
-
 var popup = L.popup();
 
 function circleClick(e){
-    //  alert("you clicked at " + e.latlng);
     popup
         .setLatLng(e.latlng)
         .setContent("You clicked at " + e.latlng.toString())
