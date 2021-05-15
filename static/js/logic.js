@@ -3,7 +3,7 @@
 // This gets inserted into the div with an id of 'map'
 var myMap = L.map("mapid", {
     center: [39.3210, -111.0937],
-    zoom: 5
+    zoom: 4
   });
   
   // Adding a tile layer (the background map image) to our map
@@ -187,7 +187,7 @@ function getColor(d) {
 function style(feature) {
     return {
         fillColor: getColor(feature.properties.density),
-        weight: 2,
+        weight: 1,
         opacity: 1,
         color: 'white',
         dashArray: '3',
