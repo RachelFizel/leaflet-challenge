@@ -17,7 +17,6 @@ var myMap = L.map("mapid", {
     accessToken: API_KEY
   }).addTo(myMap);
   
-  
 
 mapEarthQuakes(); 
 mapTectonicPlates();
@@ -40,22 +39,44 @@ function mapEarthQuakes() {
                 style:function (feature){
                     return {
                         color: "white",
-                        // Set color scale
-                        //scale: ["#ffffb2", "#b10026"],
-                        //fillColor: '#008080',
                         fillColor: getColor(feature.geometry.coordinates[2]),
                         fillOpacity: 0.5,
                         radius: feature.properties.mag * 5
-                        //title: place
                     }
+                },
+                onEachFeature: function onEachFeature(feature, layer) {
+                    //console.log("Magnitude, the location and depth");
+                    layer.bindPopup("Lat/Long" + feature.geometry.coordinates[0] + "/" + feature.geometry.coordinates[1] +
+                    "</h3><p>Magnitude: " + feature.properties.mag + "</p>" +
+                    "</h3><p>Depth: " + feature.geometry.coordinates[2] + "</p>" );
                 }
-
-                
-            }).addTo(myMap).on("click", circleClick);
+            }).addTo(myMap);
     });
+    
+
+    // // Set up the legend
+    //     var legend = L.control({ position: "bottomright" });
+    //     legend.onAdd = function(myMap) {
+    //         console.log("onAdd");
+
+    //         var div = L.DomUtil.create('div', 'info legend'),
+            
+    // //              steps =  6
+    // //              grades = [-10, 10, 30, 50, 70, 90]
+
+    // //         // loop through our density intervals and generate a label with a colored square for each interval
+    //          for (var i = 0; i < steps; i++) {
+    //              div.innerHTML +=
+    //                  '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+    //                  grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+    //          }
+
+    //          return div;
+    //     };
+    //     legend.addTo(myMap);   
+    // });
 
 };
-
 
 
 
@@ -75,9 +96,6 @@ function mapTectonicPlates() {
         
     });
 };
-
-
-
 
 
 
@@ -106,12 +124,3 @@ function style(feature) {
 }
 
    
-
-var popup = L.popup();
-
-function circleClick(e){
-    popup
-        .setLatLng(e.latlng)
-        .setContent("You clicked at " + e.latlng.toString())
-        .openOn(myMap);
-};
